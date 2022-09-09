@@ -1,6 +1,6 @@
 package tree;
 
-public class Aluno implements Comparable{
+public class Aluno implements Comparable<Aluno>{
 
     private int matricula;
     private String nome;
@@ -13,12 +13,14 @@ public class Aluno implements Comparable{
     }
 
     @Override
-    public int compareTo(Object o) {
-        Aluno a = (Aluno) o;
+    public int compareTo(Aluno a) {
         if(this.matricula == a.getMatricula()){
+            return 0;
+        } else if(this.matricula < a.getMatricula()){
+            return -1;
+        } else {
             return 1;
         }
-        return 0;
     }
     
     public int getMatricula() {
@@ -29,7 +31,10 @@ public class Aluno implements Comparable{
         return nome;
     }
 
-    public float nota(){
+    public float getNota(){
+        return nota;
+    }
+    public float setNota(){
         return nota;
     }
 }
