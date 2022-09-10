@@ -2,11 +2,11 @@ package tree;
 
 public class No <T extends Comparable<T>>{
     private T valor;
-    private No<T> filhoEsquerda, filhoDireita;
+    private No<T> filhoEsquerdo, filhoDireita;
 
     public No(T valor){
         this.valor = valor;
-        this.filhoEsquerda = null;
+        this.filhoEsquerdo = null;
         this.filhoDireita = null;
     }
 
@@ -17,19 +17,19 @@ public class No <T extends Comparable<T>>{
         return this.valor;
     }
 
-    public void setFilhoEsquerda(No<T> no) {
-        this.filhoEsquerda = no;
+    public void setFilhoEsquerdo(No<T> no) {
+        this.filhoEsquerdo = no;
     }
 
     public void setFilhoDireita(No<T> no) {
         this.filhoDireita = no;
     }
 
-    public No<T> getFilhoEsquerda() {
-        return filhoEsquerda;
+    public No<T> getFilhoEsquerdo() {
+        return filhoEsquerdo;
     }
 
-    public No<T> getFilhoDireita() {
+    public No<T> getFilhoDireito() {
         return filhoDireita;
     }
 }

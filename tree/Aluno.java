@@ -1,6 +1,6 @@
 package tree;
 
-public class Aluno implements Comparable<Aluno>{
+public class Aluno implements Comparable<Aluno>, Info{
 
     private int matricula;
     private String nome;
@@ -36,5 +36,10 @@ public class Aluno implements Comparable<Aluno>{
     }
     public float setNota(){
         return nota;
+    }
+
+    @Override
+    public String compileInfos() {
+        return String.format("%d;%s;%f", this.matricula, this.nome, this.nota);
     }
 }

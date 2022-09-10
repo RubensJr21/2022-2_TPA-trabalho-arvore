@@ -1,101 +1,179 @@
 package tree;
 
-public class ArvoreBinaria <T extends Comparable<T>>{
+public class ArvoreBinaria <T extends Comparable<T> & Info>{
     private No<T> raiz, lesserNo, biggerNo;
     private int amountItems = 0;
 
-    public ArvoreBinaria(No<T> no){
-        if(no != null) this.amountItems++;
-        this.raiz = no;
-        this.lesserNo = no;
-        this.biggerNo = no;
+    public ArvoreBinaria(){
+        this.raiz = null;
+        this.lesserNo = null;
+        this.biggerNo = null;
+    }
+
+    private void insert(No<T> raiz, No<T> item){
+        int result = item.getValor().compareTo((raiz.getValor()));
+        if(result == 0){
+            // se for igual atualizar dados
+            this.raiz = item;
+        }else{
+            if(result < 0){
+                if(raiz.getFilhoEsquerdo() == null){
+                    raiz.setFilhoEsquerdo((item));
+                    System.out.println(String.format("Inseriu à esquerda do: %s", raiz.getValor().compileInfos()));
+                }else{
+                    insert(raiz.getFilhoEsquerdo(), item);
+                }
+            } else {
+                if(raiz.getFilhoDireito() == null){
+                    raiz.setFilhoDireita((item));
+                    System.out.println(String.format("Inseriu à direita do: %s", raiz.getValor().compileInfos()));
+                } else {
+                    insert(raiz.getFilhoDireito(), item);
+                }
+            }
+        }
     }
 
     public void insertItem(No<T> item) {
         //TO-DO: Implementar método de inserção
         this.amountItems++;
-        if(item.getValor().compareTo(lesserNo.getValor()) < 0){
+        if(lesserNo == null || item.getValor().compareTo(lesserNo.getValor()) < 0){
             lesserNo = item;
         }
-        if(item.getValor().compareTo(biggerNo.getValor()) > 0){
+        if(biggerNo == null || item.getValor().compareTo(biggerNo.getValor()) > 0){
             biggerNo = item;
         }
-        No<T> noRaiz = this.raiz;
-        while(noRaiz != null){
-            int result = item.getValor().compareTo((noRaiz.getValor()));
-            if(result == 0){
-                // se for igual atualizar dados
-                noRaiz.setValor(item.getValor());
-            }else{
-                if(result < 0){
-                    if(noRaiz.getFilhoEsquerda() == null){
-                        noRaiz.setFilhoEsquerda((item));
-                    }else{
-                        noRaiz = noRaiz.getFilhoEsquerda();
-                    }
-                } else{
-                    if(noRaiz.getFilhoDireita() == null){
-                        noRaiz.setFilhoDireita((item));
-                    } else {
-                        noRaiz = noRaiz.getFilhoDireita();
-                    }
-                }
-            }
+        if(this.raiz != null){
+            insert(this.raiz, item);
+        } else {
+            this.raiz = item;
         }
-        //
     }
 
-    public No<T> searchItem(No<T> item) {
-        No<T> noRaiz = this.raiz;
-        if(noRaiz != null){
-            int result = item.getValor().compareTo((noRaiz.getValor()));
+    private T search(No<T> raiz, T item){
+        if(raiz != null){
+            int result = item.compareTo(raiz.getValor());
+            // System.out.println(String.format("Comparando: %s || %s", raiz.getValor().compileInfos(), item.compileInfos()));
+            // System.out.println(String.format("result = %d", result));
             if(result == 0){
-                return noRaiz;
-            }else{
-                if(result < 0){
-                    searchItem(noRaiz.getFilhoEsquerda());
-                } else{
-                    searchItem(noRaiz.getFilhoDireita());
-                }
+                return raiz.getValor();
+            } else if(result < 0){
+                return search(raiz.getFilhoEsquerdo(), item);
+            } else {
+                return search(raiz.getFilhoDireito(), item);
             }
+        }else {
+            return null;
         }
-        return null;
+    }
+
+    public T searchItem(T item) {
+        return search(this.raiz, item);
     }
 
     private void updateLesserNo(No<T> raiz){
-        if(raiz.getFilhoEsquerda() != null){
-            updateLesserNo(raiz.getFilhoEsquerda());
+        if(raiz.getFilhoEsquerdo() != null){
+            updateLesserNo(raiz.getFilhoEsquerdo());
         } else {
             this.lesserNo = raiz;
         }
     }
 
     private void updateBiggerNo(No<T> raiz){
-        if(raiz.getFilhoDireita() != null){
-            updateBiggerNo(raiz.getFilhoDireita());
+        if(raiz.getFilhoDireito() != null){
+            updateBiggerNo(raiz.getFilhoDireito());
         } else {
             this.biggerNo = raiz;
         }
     }
 
+    private void remove(No<T> raiz, No<T> item){
+        if(raiz != null){
+            int result = item.getValor().compareTo(raiz.getValor());
+            System.out.println(String.format("result = %d", result));
+            if(result == 0){
+                if(raiz.getFilhoEsquerdo() != null && raiz.getFilhoDireito() != null){
+                    System.out.println(raiz.getValor().compileInfos());
+                    No<T> filhoDireito = raiz.getFilhoDireito();
+                    // Java não passa referência
+                    // Guardar referêcia do anterior para setar filho à esquerda ou à direita
+                    raiz = raiz.getFilhoEsquerdo();
+                    insert(this.raiz, filhoDireito);
+                } else if(raiz.getFilhoEsquerdo() != null){
+                    raiz = raiz.getFilhoEsquerdo();
+                } else if(raiz.getFilhoDireito() != null){
+                    raiz = raiz.getFilhoDireito();
+                } else {
+                    raiz = null;
+                }
+            } else {
+                if(result < 0){
+                    remove(raiz.getFilhoEsquerdo(), item);
+                } else {
+                    remove(raiz.getFilhoDireito(), item);
+                }
+            }
+        }
+    }
+
     public void removeItem(No<T> item) {
         // TO-DO: Implementar método de remoção
-        // remover item
+        remove(this.raiz, item);
         this.amountItems--;
         updateLesserNo(this.raiz);
         updateBiggerNo(this.raiz);
     }
 
-    public void walkInOrder(){
+    private void walkInOrderAux(No<T> raiz){
         // TO-DO: Implementar método de caminhar em ordem
+        if(raiz != null){
+            // System.out.println(String.format("Lado esquerdo: %s", (raiz.getFilhoEsquerdo() == null) ? "null" : ""));
+            walkInOrderAux(raiz.getFilhoEsquerdo());
+            // System.out.println("Meio: ");
+            System.out.println(raiz.getValor().compileInfos());
+            // System.out.println(String.format("Lado direito: %s", (raiz.getFilhoDireito() == null) ? "null" : ""));
+            walkInOrderAux(raiz.getFilhoDireito());
+            // System.out.println("===============");
+        }
     }
 
-    public void walkInNivel(){
+    public void walkInOrder(){
+        walkInOrderAux(this.raiz);
+    }
+
+    public void walkInNivelAux(No<T> no){
         // TO-DO: Implementar método de caminhar em nível
+        
+        
+    }
+    public void walkInNivel(){
+        walkInNivelAux(this.raiz);
+        
     }
 
-    public int getWidthTree(){
-        return 0;
+    private int widthTree(No<T> raiz, int nivel){
+        // TO-DO: Pegar quantos niveis possui a arvore
+        if(raiz != null){
+            nivel++;
+            if(raiz.getFilhoEsquerdo() != null && raiz.getFilhoDireito() != null){
+                int widthE = widthTree(raiz.getFilhoEsquerdo(), nivel);
+                int widthD = widthTree(raiz.getFilhoDireito(), nivel);
+                if(widthE > widthD){
+                    return widthE;
+                } else {
+                    return widthD;
+                }
+            } else if(raiz.getFilhoEsquerdo() != null){
+                return widthTree(raiz.getFilhoEsquerdo(), nivel);
+            } else if(raiz.getFilhoDireito() != null){
+                return widthTree(raiz.getFilhoDireito(), nivel);
+            }
+        }
+        return nivel;
+    }
+
+    public int getWidthTree() {
+        return widthTree(this.raiz, -1);
     }
 
     public int getAmountItems(){
