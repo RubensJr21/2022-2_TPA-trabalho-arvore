@@ -1,0 +1,6 @@
+-1;Thiago;55.0
+0;João;29.0
+1;Maria;30.0
+64561;Joãozinho;74.0 
+75423;Rubens;100.0
+85236;Camila;60.0
