@@ -196,14 +196,23 @@ public class BinaryTree <T extends Comparable<T> & Info>{
         walkInOrderAux(this.root);
     }
 
-    private void walkInNivelAux(Node<T> no){
+    private void walkInLevelAux(Node<T> no){
         // TO-DO: Implementar método de caminhar em nível
-        
-        
+        // Usar altura da árvore para implementar
+        // Caminha descendo por cada filho, incrementando até cada nível
+        /* psedo código
+        1. Começa da raiz
+        2. Gera um intervalo de inicio 0 (primeiro nível da árvore) 
+        até a altura da árvore
+        3. Desce e imprime as informações se o nó atual for
+        daquela nível que tem que ser impresso naquele momento
+        3.1 Para saber o nó é do nível ou não, podemos passar
+        uma variável na chamada informando o próximo nível
+        */
     }
-    public void walkInNivel(){
+    public void walkInLevel(){
         System.out.println("\n\nCaminhando em Nível:");
-        walkInNivelAux(this.root);
+        walkInLevelAux(this.root);
         
     }
 
