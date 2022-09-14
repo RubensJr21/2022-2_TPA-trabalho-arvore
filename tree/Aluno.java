@@ -40,6 +40,6 @@ public class Aluno implements Comparable<Aluno>, Info{
 
     @Override
     public String compileInfos() {
-        return String.format("%d;%s;%f", this.matricula, this.nome, this.nota);
+        return String.format("%d;%s;%.2f", this.matricula, this.nome, this.nota);
     }
 }

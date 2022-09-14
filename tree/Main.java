@@ -129,6 +129,8 @@ public class Main {
         //sair
         tree.walkInOrder();
 
+        tree.walkInLevel();
+
         printStatiscts(tree);
     }
 }

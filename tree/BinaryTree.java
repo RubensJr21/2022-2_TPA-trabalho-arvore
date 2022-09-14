@@ -196,24 +196,44 @@ public class BinaryTree <T extends Comparable<T> & Info>{
         walkInOrderAux(this.root);
     }
 
-    private void walkInLevelAux(Node<T> no){
-        // TO-DO: Implementar método de caminhar em nível
-        // Usar altura da árvore para implementar
-        // Caminha descendo por cada filho, incrementando até cada nível
-        /* psedo código
-        1. Começa da raiz
-        2. Gera um intervalo de inicio 0 (primeiro nível da árvore) 
-        até a altura da árvore
-        3. Desce e imprime as informações se o nó atual for
-        daquela nível que tem que ser impresso naquele momento
-        3.1 Para saber o nó é do nível ou não, podemos passar
-        uma variável na chamada informando o próximo nível
-        */
+    private void walkInLevelAux(Node<T> root, int levelWanted, int levelCurrent){
+        // verficar se está no nível
+        if(levelWanted == levelCurrent){
+            System.out.println(root.getValue().compileInfos());
+        } else if(levelCurrent < levelWanted) { 
+            int haveChild = haveChild(root);
+            if(haveChild == 2){
+                walkInLevelAux(root.getLeftChild(), levelWanted, levelCurrent + 1);
+                walkInLevelAux(root.getRightChild(), levelWanted, levelCurrent + 1);
+            } else if(haveChild == 1){
+                walkInLevelAux(root.getLeftChild(), levelWanted, levelCurrent + 1);
+            } else if(haveChild == 0){
+                walkInLevelAux(root.getRightChild(), levelWanted, levelCurrent + 1);
+            }
+        }
     }
+
+    // TO-DO: Implementar método de caminhar em nível
+    // Usar altura da árvore para implementar
+    // Caminha descendo por cada filho, incrementando até cada nível
+    /* psedo código
+    1. Começa da raiz
+    2. Gera um intervalo de inicio 0 (primeiro nível da árvore) 
+    até a altura da árvore
+    3. Desce e imprime as informações se o nó atual for
+    daquela nível que tem que ser impresso naquele momento
+    3.1 Para saber o nó é do nível ou não, podemos passar
+    uma variável na chamada informando o próximo nível
+    */
+
     public void walkInLevel(){
         System.out.println("\n\nCaminhando em Nível:");
-        walkInLevelAux(this.root);
+        int width = getWidthTree();
         
+        for(int i = 0;i < width;i++){
+            System.out.println("Nivel " + i);
+            walkInLevelAux(this.root, i, 0); 
+        }
     }
 
     private int widthTree(Node<T> root, int level){
