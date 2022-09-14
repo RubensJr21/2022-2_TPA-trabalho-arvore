@@ -266,11 +266,17 @@ public class BinaryTree <T extends Comparable<T>>{
         return amountItems;
     }
 
-    public Node<T> getLesserNode(){
-        return lesserNode;
+    public T getLesserItem(){
+        if(lesserNode == null){
+            return null;
+        }
+        return lesserNode.getValue();
     }
 
-    public Node<T> getBiggerNode(){
-        return biggerNode;
+    public T getBiggerItem(){
+        if(biggerNode == null){
+            return null;
+        }
+        return biggerNode.getValue();
     }
 }

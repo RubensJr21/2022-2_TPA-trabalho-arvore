@@ -18,8 +18,8 @@ public class Main {
         System.out.println("==========IMPRIMINDO ÁRVORE ==========");
         System.out.println("Quantidade de elementos: "+ tree.getAmountItems());
         System.out.println("Altura da árvore: "+ tree.getWidthTree());
-        System.out.println("Maior elemento: " + tree.getBiggerNode().getValue().toString());
-        System.out.println("Menor elemento: " + tree.getLesserNode().getValue().toString());
+        System.out.println("Maior elemento: " + tree.getBiggerItem().toString());
+        System.out.println("Menor elemento: " + tree.getLesserItem().toString());
         System.out.println("=====ENCERRANDO IMPRESSÃO ÁRVORE =====\n\n");
     }
 
@@ -82,7 +82,7 @@ public class Main {
         float nota = entrada.nextFloat();
         
         Aluno aluno = new Aluno(matricula, nome, nota);
-        
+
         tree.insertItem(aluno);
         System.out.println("======ENCERRANDO INSERÇÃO ALUNO ======\n\n");
     }
