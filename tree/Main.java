@@ -39,10 +39,9 @@ public class Main {
                 String nome = line[1];
                 float nota = Float.parseFloat(line[2]);
                 
-                Aluno a = new Aluno(matricula, nome, nota);
-                Node<Aluno> no = new Node<Aluno>(a);
+                Aluno student = new Aluno(matricula, nome, nota);
 
-                tree.insertItem(no);
+                tree.insertItem(student);
                 
 			} else{
                 break;
@@ -83,8 +82,8 @@ public class Main {
         float nota = entrada.nextFloat();
         
         Aluno aluno = new Aluno(matricula, nome, nota);
-        Node<Aluno> no = new Node<Aluno>(aluno);
-        tree.insertItem(no);
+        
+        tree.insertItem(aluno);
         System.out.println("======ENCERRANDO INSERÇÃO ALUNO ======\n\n");
     }
 

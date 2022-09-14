@@ -34,20 +34,21 @@ public class BinaryTree <T extends Comparable<T>>{
         }
     }
 
-    public void insertItem(Node<T> item) {
-        System.out.println(String.format("\n\nInserindo item: %s", item.getValue().toString()));
+    public void insertItem(T item) {
+        System.out.println(String.format("\n\nInserindo item: %s", item.toString()));
         //TO-DO: Implementar método de inserção
         this.amountItems++;
-        if(lesserNode== null || item.getValue().compareTo(lesserNode.getValue()) < 0){
-            lesserNode= item;
+        Node<T> newNode = new Node<T>(item);
+        if(lesserNode== null || item.compareTo(lesserNode.getValue()) < 0){
+            lesserNode= newNode;
         }
-        if(biggerNode== null || item.getValue().compareTo(biggerNode.getValue()) > 0){
-            biggerNode= item;
+        if(biggerNode== null || item.compareTo(biggerNode.getValue()) > 0){
+            biggerNode= newNode;
         }
         if(this.root != null){
-            insert(this.root, item);
+            insert(this.root, newNode);
         } else {
-            this.root = item;
+            this.root = newNode;
         }
     }
 
@@ -129,7 +130,7 @@ public class BinaryTree <T extends Comparable<T>>{
         childHaveChild = haveChild(child);
         if(childHaveChild == 2){ // O filho tiver 2 filhos
             root.setLeftChild(child.getLeftChild());
-            insertItem(child.getLeftChild());
+            insert(this.root, child.getLeftChild());
         } else if(childHaveChild == 1){ // O filho tiver apenas 1 filho à esquerda
             root.setLeftChild(child.getLeftChild());
         } else if(childHaveChild == 0){ // O filho tiver apenas 1 filho à direita
