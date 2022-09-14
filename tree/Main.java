@@ -18,8 +18,8 @@ public class Main {
         System.out.println("==========IMPRIMINDO ÁRVORE ==========");
         System.out.println("Quantidade de elementos: "+ tree.getAmountItems());
         System.out.println("Altura da árvore: "+ tree.getWidthTree());
-        System.out.println("Maior elemento: " + tree.getBiggerNode().getValue().compileInfos());
-        System.out.println("Menor elemento: " + tree.getLesserNode().getValue().compileInfos());
+        System.out.println("Maior elemento: " + tree.getBiggerNode().getValue().toString());
+        System.out.println("Menor elemento: " + tree.getLesserNode().getValue().toString());
         System.out.println("=====ENCERRANDO IMPRESSÃO ÁRVORE =====\n\n");
     }
 
@@ -64,7 +64,7 @@ public class Main {
         Aluno item = tree.searchItem(a);
         
         if(item != null){
-            println(item.compileInfos());
+            println(item.toString());
         }else{
             System.out.println("Matricula não existe");
         }

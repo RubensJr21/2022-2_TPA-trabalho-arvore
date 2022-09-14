@@ -1,6 +1,6 @@
 package tree;
 
-public class Aluno implements Comparable<Aluno>, Info{
+public class Aluno implements Comparable<Aluno>{
 
     private int matricula;
     private String nome;
@@ -39,7 +39,7 @@ public class Aluno implements Comparable<Aluno>, Info{
     }
 
     @Override
-    public String compileInfos() {
+    public String toString() {
         return String.format("%d;%s;%.2f", this.matricula, this.nome, this.nota);
     }
 }

@@ -1,6 +1,6 @@
 package tree;
 
-public class BinaryTree <T extends Comparable<T> & Info>{
+public class BinaryTree <T extends Comparable<T>>{
     private Node<T> root, lesserNode, biggerNode;
     private int amountItems = 0;
 
@@ -19,14 +19,14 @@ public class BinaryTree <T extends Comparable<T> & Info>{
             if(result < 0){
                 if(root.getLeftChild() == null){
                     root.setLeftChild((item));
-                    System.out.println(String.format("Inseriu à esquerda do: %s", root.getValue().compileInfos()));
+                    System.out.println(String.format("Inseriu à esquerda do: %s", root.getValue().toString()));
                 }else{
                     insert(root.getLeftChild(), item);
                 }
             } else {
                 if(root.getRightChild() == null){
                     root.setRightChild((item));
-                    System.out.println(String.format("Inseriu à direita do: %s", root.getValue().compileInfos()));
+                    System.out.println(String.format("Inseriu à direita do: %s", root.getValue().toString()));
                 } else {
                     insert(root.getRightChild(), item);
                 }
@@ -35,7 +35,7 @@ public class BinaryTree <T extends Comparable<T> & Info>{
     }
 
     public void insertItem(Node<T> item) {
-        System.out.println(String.format("\n\nInserindo item: %s", item.getValue().compileInfos()));
+        System.out.println(String.format("\n\nInserindo item: %s", item.getValue().toString()));
         //TO-DO: Implementar método de inserção
         this.amountItems++;
         if(lesserNode== null || item.getValue().compareTo(lesserNode.getValue()) < 0){
@@ -54,7 +54,7 @@ public class BinaryTree <T extends Comparable<T> & Info>{
     private T search(Node<T> root, T item){
         if(root != null){
             int result = item.compareTo(root.getValue());
-            // System.out.println(String.format("Comparando: %s || %s", root.getValue().compileInfos(), item.compileInfos()));
+            // System.out.println(String.format("Comparando: %s || %s", root.getValue().toString(), item.toString()));
             // System.out.println(String.format("result = %d", result));
             if(result == 0){
                 return root.getValue();
@@ -69,7 +69,7 @@ public class BinaryTree <T extends Comparable<T> & Info>{
     }
 
     public T searchItem(T item) {
-        System.out.println(String.format("\n\nProcurando item item: %s", item.compileInfos()));
+        System.out.println(String.format("\n\nProcurando item item: %s", item.toString()));
         return search(this.root, item);
     }
 
@@ -170,7 +170,7 @@ public class BinaryTree <T extends Comparable<T> & Info>{
     }
 
     public void removeItem(Node<T> item) {
-        System.out.println(String.format("\n\nExcluindo item: %s", item.getValue().compileInfos()));
+        System.out.println(String.format("\n\nExcluindo item: %s", item.getValue().toString()));
         // TO-DO: Implementar método de remoção
         remove(this.root, item);
         this.amountItems--;
@@ -184,7 +184,7 @@ public class BinaryTree <T extends Comparable<T> & Info>{
             // System.out.println(String.format("Lado esquerdo: %s", (root.getLeftChild() == null) ? "null" : ""));
             walkInOrderAux(root.getLeftChild());
             // System.out.println("Meio: ");
-            System.out.println(root.getValue().compileInfos());
+            System.out.println(root.getValue().toString());
             // System.out.println(String.format("Lado direito: %s", (root.getRightChild() == null) ? "null" : ""));
             walkInOrderAux(root.getRightChild());
             // System.out.println("===============");
@@ -199,7 +199,7 @@ public class BinaryTree <T extends Comparable<T> & Info>{
     private void walkInLevelAux(Node<T> root, int levelWanted, int levelCurrent){
         // verficar se está no nível
         if(levelWanted == levelCurrent){
-            System.out.println(root.getValue().compileInfos());
+            System.out.println(root.getValue().toString());
         } else if(levelCurrent < levelWanted) { 
             int haveChild = haveChild(root);
             if(haveChild == 2){
