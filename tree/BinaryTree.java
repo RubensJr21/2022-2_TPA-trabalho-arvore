@@ -279,4 +279,8 @@ public class BinaryTree <T extends Comparable<T>>{
         }
         return biggerNode.getValue();
     }
+
+    public T getWorstCase(){
+        return null;
+    }
 }
