@@ -20,6 +20,7 @@ public class Main {
         System.out.println("Altura da árvore: "+ tree.getWidthTree());
         System.out.println("Maior elemento: " + tree.getBiggerItem().toString());
         System.out.println("Menor elemento: " + tree.getLesserItem().toString());
+        System.out.println("Pior caso de busca: " + tree.getWorstCase().toString());
         System.out.println("=====ENCERRANDO IMPRESSÃO ÁRVORE =====\n\n");
     }
 
@@ -94,9 +95,8 @@ public class Main {
         String nome = null;
         float nota = 0;
         
-        Aluno a = new Aluno(matricula, nome, nota);
-        Node<Aluno> no = new Node<Aluno>(a);
-        tree.removeItem(no);
+        Aluno aluno = new Aluno(matricula, nome, nota);
+        tree.removeItem(aluno);
         System.out.println("======ENCERRANDO EXCLUSÃO ALUNO ======\n\n");
     }
     

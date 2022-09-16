@@ -1,35 +1,35 @@
 package tree;
 
 public class Node <T extends Comparable<T>>{
-    private T valor;
-    private Node<T> LeftChild, filhoDireita;
+    private T value;
+    private Node<T> leftChild, rightChild;
 
-    public Node(T valor){
-        this.valor = valor;
-        this.LeftChild = null;
-        this.filhoDireita = null;
+    public Node(T value){
+        this.value = value;
+        this.leftChild = null;
+        this.rightChild = null;
     }
 
-    public void setValor(T valor){
-        this.valor = valor;
+    public void setValue(T value){
+        this.value = value;
     }
     public T getValue(){
-        return this.valor;
+        return this.value;
     }
 
-    public void setLeftChild(Node<T> no) {
-        this.LeftChild = no;
+    public void setLeftChild(Node<T> node) {
+        this.leftChild = node;
     }
 
-    public void setRightChild(Node<T> no) {
-        this.filhoDireita = no;
+    public void setRightChild(Node<T> node) {
+        this.rightChild = node;
     }
 
     public Node<T> getLeftChild() {
-        return LeftChild;
+        return leftChild;
     }
 
     public Node<T> getRightChild() {
-        return filhoDireita;
+        return rightChild;
     }
 }

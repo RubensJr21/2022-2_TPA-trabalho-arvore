@@ -1,7 +1,8 @@
 package tree;
 
 public class BinaryTree <T extends Comparable<T>>{
-    private Node<T> root, lesserNode, biggerNode;
+    private Node<T> root;
+    private T lesserNode, biggerNode, worstCase;
     private int amountItems = 0;
 
     public BinaryTree(){
@@ -38,18 +39,20 @@ public class BinaryTree <T extends Comparable<T>>{
         System.out.println(String.format("\n\nInserindo item: %s", item.toString()));
         //TO-DO: Implementar método de inserção
         this.amountItems++;
+        if(lesserNode == null || item.compareTo(lesserNode) < 0){
+            lesserNode = item;
+        }
+        if(biggerNode == null || item.compareTo(biggerNode) > 0){
+            biggerNode = item;
+        }
         Node<T> newNode = new Node<T>(item);
-        if(lesserNode== null || item.compareTo(lesserNode.getValue()) < 0){
-            lesserNode= newNode;
-        }
-        if(biggerNode== null || item.compareTo(biggerNode.getValue()) > 0){
-            biggerNode= newNode;
-        }
         if(this.root != null){
             insert(this.root, newNode);
         } else {
             this.root = newNode;
         }
+        int alturaArvore = this.getWidthTree();
+        updateWorstCaseAux(this.root, alturaArvore, 0);
     }
 
     private T search(Node<T> root, T item){
@@ -78,7 +81,7 @@ public class BinaryTree <T extends Comparable<T>>{
         if(root.getLeftChild() != null){
             updateLesserNo(root.getLeftChild());
         } else {
-            this.lesserNode= root;
+            this.lesserNode = root.getValue();
         }
     }
 
@@ -86,7 +89,7 @@ public class BinaryTree <T extends Comparable<T>>{
         if(root.getRightChild() != null){
             updateBiggerNo(root.getRightChild());
         } else {
-            this.biggerNode= root;
+            this.biggerNode = root.getValue();
         }
     }
 
@@ -109,15 +112,15 @@ public class BinaryTree <T extends Comparable<T>>{
     // Retorna  0 se não removerá
     // Retorna -1 se for o filho à esquerda
     // Retorna  1 se for o filho à direita
-    private int anyOfMyChildWillBeRemoved(Node<T> dad, Node<T> item){
+    private int anyOfMyChildWillBeRemoved(Node<T> dad, T item){
         Node<T> son = dad.getLeftChild();
         if(son != null){
-            int result = son.getValue().compareTo(item.getValue());
+            int result = son.getValue().compareTo(item);
             if(result == 0){
                 return -1;
             }
             son = dad.getRightChild();
-            result = son.getValue().compareTo(item.getValue());
+            result = son.getValue().compareTo(item);
             if(result == 0){
                 return 1;
             }
@@ -140,9 +143,22 @@ public class BinaryTree <T extends Comparable<T>>{
         }
     }
 
-    private void remove(Node<T> root, Node<T> item){
+    private void removeRoot(){
+        int haveChild = haveChild(this.root);
+        if(haveChild == 2){
+            this.root = this.root.getLeftChild();
+            insert(this.root, this.root.getRightChild());
+        } else if(haveChild == 1){
+            this.root = this.root.getLeftChild();
+        } else if (haveChild == 0){
+            this.root = this.root.getRightChild();
+        } else {
+            this.root = null;
+        }
+    }
+    private void remove(Node<T> root, T item){
         if(root != null){
-            int result = item.getValue().compareTo(root.getValue());
+            int result = item.compareTo(root.getValue());
             System.out.println(String.format("result = %d", result));
             if(result == 0){ // só vai acontecer caso deseje remover a root
                 int childRemove = anyOfMyChildWillBeRemoved(root, item);
@@ -170,13 +186,19 @@ public class BinaryTree <T extends Comparable<T>>{
         }
     }
 
-    public void removeItem(Node<T> item) {
-        System.out.println(String.format("\n\nExcluindo item: %s", item.getValue().toString()));
+    public void removeItem(T item) {
+        System.out.println(String.format("\n\nExcluindo item: %s", item.toString()));
         // TO-DO: Implementar método de remoção
-        remove(this.root, item);
+        if(item.compareTo(this.root.getValue()) == 0){
+            removeRoot();
+        }else {
+            remove(this.root, item);
+        }
         this.amountItems--;
         updateLesserNo(this.root);
         updateBiggerNo(this.root);
+        int alturaArvore = this.getWidthTree();
+        updateWorstCaseAux(this.root, alturaArvore, 0);
     }
 
     private void walkInOrderAux(Node<T> root){
@@ -231,9 +253,10 @@ public class BinaryTree <T extends Comparable<T>>{
         System.out.println("\n\nCaminhando em Nível:");
         int width = getWidthTree();
         
-        for(int i = 0;i < width;i++){
+        for(int i = 0;i <= width;i++){
             System.out.println("Nivel " + i);
-            walkInLevelAux(this.root, i, 0); 
+            walkInLevelAux(this.root, i, 0);
+            System.out.println("Fim do nivel: " + i);
         }
     }
 
@@ -267,20 +290,36 @@ public class BinaryTree <T extends Comparable<T>>{
     }
 
     public T getLesserItem(){
-        if(lesserNode == null){
-            return null;
-        }
-        return lesserNode.getValue();
+        return lesserNode;
     }
 
     public T getBiggerItem(){
-        if(biggerNode == null){
-            return null;
-        }
-        return biggerNode.getValue();
+        return biggerNode;
     }
 
+    private void updateWorstCaseAux(Node<T> root, int levelWanted, int levelCurrent){
+        if(levelWanted == levelCurrent){
+            this.worstCase = root.getValue();
+            System.out.println("===> ACHEI O PIOR CASO <===");
+            System.out.println(this.worstCase.toString());
+            System.out.println("===> ***************** <===");
+        } else if(levelCurrent < levelWanted) { 
+            int haveChild = haveChild(root);
+            if(haveChild == 2){
+                updateWorstCaseAux(root.getLeftChild(), levelWanted, levelCurrent + 1);
+                updateWorstCaseAux(root.getRightChild(), levelWanted, levelCurrent + 1);
+            } else if(haveChild == 1){
+                updateWorstCaseAux(root.getLeftChild(), levelWanted, levelCurrent + 1);
+            } else if(haveChild == 0){
+                updateWorstCaseAux(root.getRightChild(), levelWanted, levelCurrent + 1);
+            }
+        }
+    }
+    
     public T getWorstCase(){
-        return null;
+        // pegar raiz
+        // andar nivel por nivel, verificando se els possui filhos abaixo
+        // quando não ter mais filhos, verifico quem tem o nivel mais alto
+        return this.worstCase;
     }
 }
