@@ -3,12 +3,34 @@ package tree;
 public class BinaryTree <T extends Comparable<T>>{
     private Node<T> root;
     private T lesserNode, biggerNode, worstCase;
-    private int amountItems = 0;
+    private int heightTree = 0, amountItems = 0;
 
     public BinaryTree(){
         this.root = null;
         this.lesserNode = null;
         this.biggerNode = null;
+    }
+
+    private void updateDataFromTreeAfterInsert(T item){
+        if(this.lesserNode == null || item.compareTo(this.lesserNode) < 0){
+            this.lesserNode = item;
+        }
+        if(this.biggerNode == null || item.compareTo(this.biggerNode) > 0){
+            this.biggerNode = item;
+        }
+        updateHeightTree(this.root);
+        updateWorstCaseAux(this.root, this.heightTree, 0);
+    }
+    private void updateDataFromTreeAfterRemove(){
+        if(this.amountItems <= 0){
+            this.lesserNode = null;
+            this.biggerNode = null;
+        } else {
+            updateLesserNode(this.root);
+            updateBiggerNode(this.root);
+        }
+        updateHeightTree(this.root);
+        updateWorstCaseAux(this.root, this.heightTree, 0);
     }
 
     private void insert(Node<T> root, Node<T> item){
@@ -21,7 +43,7 @@ public class BinaryTree <T extends Comparable<T>>{
                 if(root.getLeftChild() == null){
                     root.setLeftChild((item));
                     System.out.println(String.format("Inseriu à esquerda do: %s", root.getValue().toString()));
-                }else{
+                } else {
                     insert(root.getLeftChild(), item);
                 }
             } else {
@@ -38,21 +60,14 @@ public class BinaryTree <T extends Comparable<T>>{
     public void insertItem(T item) {
         System.out.println(String.format("\n\nInserindo item: %s", item.toString()));
         //TO-DO: Implementar método de inserção
-        this.amountItems++;
-        if(lesserNode == null || item.compareTo(lesserNode) < 0){
-            lesserNode = item;
-        }
-        if(biggerNode == null || item.compareTo(biggerNode) > 0){
-            biggerNode = item;
-        }
         Node<T> newNode = new Node<T>(item);
         if(this.root != null){
             insert(this.root, newNode);
         } else {
             this.root = newNode;
         }
-        int alturaArvore = this.getWidthTree();
-        updateWorstCaseAux(this.root, alturaArvore, 0);
+        this.amountItems++;
+        updateDataFromTreeAfterInsert(item);
     }
 
     private T search(Node<T> root, T item){
@@ -77,17 +92,17 @@ public class BinaryTree <T extends Comparable<T>>{
         return search(this.root, item);
     }
 
-    private void updateLesserNo(Node<T> root){
+    private void updateLesserNode(Node<T> root){
         if(root.getLeftChild() != null){
-            updateLesserNo(root.getLeftChild());
+            updateLesserNode(root.getLeftChild());
         } else {
             this.lesserNode = root.getValue();
         }
     }
 
-    private void updateBiggerNo(Node<T> root){
+    private void updateBiggerNode(Node<T> root){
         if(root.getRightChild() != null){
-            updateBiggerNo(root.getRightChild());
+            updateBiggerNode(root.getRightChild());
         } else {
             this.biggerNode = root.getValue();
         }
@@ -113,14 +128,14 @@ public class BinaryTree <T extends Comparable<T>>{
     // Retorna -1 se for o filho à esquerda
     // Retorna  1 se for o filho à direita
     private int anyOfMyChildWillBeRemoved(Node<T> dad, T item){
-        Node<T> son = dad.getLeftChild();
-        if(son != null){
-            int result = son.getValue().compareTo(item);
+        Node<T> child = dad.getLeftChild();
+        if(child != null){
+            int result = child.getValue().compareTo(item);
             if(result == 0){
                 return -1;
             }
-            son = dad.getRightChild();
-            result = son.getValue().compareTo(item);
+            child = dad.getRightChild();
+            result = child.getValue().compareTo(item);
             if(result == 0){
                 return 1;
             }
@@ -187,6 +202,9 @@ public class BinaryTree <T extends Comparable<T>>{
     }
 
     public void removeItem(T item) {
+        if(this.amountItems <= 0){
+            return; // impede falhas para caso de árvore vazia
+        }
         System.out.println(String.format("\n\nExcluindo item: %s", item.toString()));
         // TO-DO: Implementar método de remoção
         if(item.compareTo(this.root.getValue()) == 0){
@@ -195,10 +213,7 @@ public class BinaryTree <T extends Comparable<T>>{
             remove(this.root, item);
         }
         this.amountItems--;
-        updateLesserNo(this.root);
-        updateBiggerNo(this.root);
-        int alturaArvore = this.getWidthTree();
-        updateWorstCaseAux(this.root, alturaArvore, 0);
+        updateDataFromTreeAfterRemove();
     }
 
     private void walkInOrderAux(Node<T> root){
@@ -251,38 +266,41 @@ public class BinaryTree <T extends Comparable<T>>{
 
     public void walkInLevel(){
         System.out.println("\n\nCaminhando em Nível:");
-        int width = getWidthTree();
-        
-        for(int i = 0;i <= width;i++){
+                
+        for(int i = 0;i <= this.heightTree;i++){
             System.out.println("Nivel " + i);
             walkInLevelAux(this.root, i, 0);
             System.out.println("Fim do nivel: " + i);
         }
     }
 
-    private int widthTree(Node<T> root, int level){
+    private void updateHeightTree(Node<T> root){
+        this.heightTree = heightTree(root, -1);
+    }
+
+    private int heightTree(Node<T> root, int level){
         // TO-DO: Pegar quantos niveis possui a arvore
         if(root != null){
             level++;
             if(root.getLeftChild() != null && root.getRightChild() != null){
-                int widthE = widthTree(root.getLeftChild(), level);
-                int widthD = widthTree(root.getRightChild(), level);
-                if(widthE > widthD){
-                    return widthE;
+                int heightE = heightTree(root.getLeftChild(), level);
+                int heightD = heightTree(root.getRightChild(), level);
+                if(heightE > heightD){
+                    return heightE;
                 } else {
-                    return widthD;
+                    return heightD;
                 }
             } else if(root.getLeftChild() != null){
-                return widthTree(root.getLeftChild(), level);
+                return heightTree(root.getLeftChild(), level);
             } else if(root.getRightChild() != null){
-                return widthTree(root.getRightChild(), level);
+                return heightTree(root.getRightChild(), level);
             }
         }
         return level;
     }
 
-    public int getWidthTree() {
-        return widthTree(this.root, -1);
+    public int getHeightTree() {
+        return heightTree;
     }
 
     public int getAmountItems(){
@@ -300,9 +318,9 @@ public class BinaryTree <T extends Comparable<T>>{
     private void updateWorstCaseAux(Node<T> root, int levelWanted, int levelCurrent){
         if(levelWanted == levelCurrent){
             this.worstCase = root.getValue();
-            System.out.println("===> ACHEI O PIOR CASO <===");
-            System.out.println(this.worstCase.toString());
-            System.out.println("===> ***************** <===");
+            // System.out.println("===> ACHEI O PIOR CASO <===");
+            // System.out.println(this.worstCase.toString());
+            // System.out.println("===> ***************** <===");
         } else if(levelCurrent < levelWanted) { 
             int haveChild = haveChild(root);
             if(haveChild == 2){

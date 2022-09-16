@@ -17,7 +17,7 @@ public class Main {
     private static void printStatiscts(BinaryTree<Aluno> tree){
         System.out.println("==========IMPRIMINDO ÁRVORE ==========");
         System.out.println("Quantidade de elementos: "+ tree.getAmountItems());
-        System.out.println("Altura da árvore: "+ tree.getWidthTree());
+        System.out.println("Altura da árvore: "+ tree.getHeightTree());
         System.out.println("Maior elemento: " + tree.getBiggerItem().toString());
         System.out.println("Menor elemento: " + tree.getLesserItem().toString());
         System.out.println("Pior caso de busca: " + tree.getWorstCase().toString());
