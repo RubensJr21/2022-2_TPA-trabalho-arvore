@@ -1,4 +1,6 @@
-package tree;
+package tree_DEBUG;
+
+import tree_DEBUG.utils.DEBUG;
 
 public class BinaryTree <T extends Comparable<T>>{
     private Node<T> root;
@@ -11,6 +13,19 @@ public class BinaryTree <T extends Comparable<T>>{
         this.biggerNode = null;
     }
     
+    private static void print(String line){
+        switch (DEBUG.MODE) {
+            case VERBOSE:
+                System.out.println(line);
+                break;
+            case DEBUG:
+                DEBUG.writeOutputInFile(line);
+                break;
+            default:
+                break;
+        }
+    }
+
     private void insert(Node<T> root, Node<T> item){
         int result = item.getValue().compareTo((root.getValue()));
         if(result == 0){
@@ -20,12 +35,14 @@ public class BinaryTree <T extends Comparable<T>>{
             if(result < 0){
                 if(root.getLeftChild() == null){
                     root.setLeftChild((item));
+                    // print(String.format("Inseriu à esquerda do: %s", root.getValue().toString()));
                 } else {
                     insert(root.getLeftChild(), item);
                 }
             } else {
                 if(root.getRightChild() == null){
                     root.setRightChild((item));
+                    // print(String.format("Inseriu à direita do: %s", root.getValue().toString()));
                 } else {
                     insert(root.getRightChild(), item);
                 }
@@ -129,7 +146,7 @@ public class BinaryTree <T extends Comparable<T>>{
     private void remove(Node<T> root, T item){
         if(root != null){
             int result = item.compareTo(root.getValue());
-            System.out.println(String.format("result = %d", result));
+            // print(String.format("result = %d", result));
             if(result == 0){ // só vai acontecer caso deseje remover a root
                 int childRemove = anyOfMyChildWillBeRemoved(root, item);
                 if(childRemove == -1){ // caso do filho esquerdo do nó atual ser removido
@@ -167,26 +184,28 @@ public class BinaryTree <T extends Comparable<T>>{
             remove(this.root, item);
         }
         this.amountItems--;
+        // updateDataFromTreeAfterRemove();
     }
 
     private void walkInOrderAux(Node<T> root){
         // TO-DO: Implementar método de caminhar em ordem
         if(root != null){
             walkInOrderAux(root.getLeftChild());
-            System.out.println(root.getValue().toString());
+            print(root.getValue().toString());
             walkInOrderAux(root.getRightChild());
         }
     }
 
     public void walkInOrder(){
-        System.out.println("\n\nCaminhando em Ordem:");
+        print("\n*****Caminhando em Ordem:*****");
         walkInOrderAux(this.root);
+        print("\n******************************");
     }
 
     private void walkInLevelAux(Node<T> root, int levelWanted, int levelCurrent){
         // verficar se está no nível
         if(levelWanted == levelCurrent){
-            System.out.println(root.getValue().toString());
+            print(root.getValue().toString());
         } else if(levelCurrent < levelWanted) { 
             int haveChild = haveChild(root);
             if(haveChild == 2){
@@ -214,11 +233,15 @@ public class BinaryTree <T extends Comparable<T>>{
     */
 
     public void walkInLevel(){
-        System.out.println("\n\nCaminhando em Nível:");
+        print("\n*****Caminhando em Nível:*****");
         updateHeightTree(this.root);
+        
         for(int i = 0;i <= this.heightTree;i++){
+            print("*****Nivel " + i + "*****");
             walkInLevelAux(this.root, i, 0);
+            print("*****Fim do nivel: " + i + "*****");
         }
+        print("\n******************************");
     }
 
     private int heightTree(Node<T> root, int level){
