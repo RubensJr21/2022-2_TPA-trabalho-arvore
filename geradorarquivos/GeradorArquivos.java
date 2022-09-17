@@ -75,13 +75,14 @@ public class GeradorArquivos {
         FileWriter arq;
         try {
             arq = new FileWriter("entradaOrdenada"+n+".txt");
-            PrintWriter gravarArq = new PrintWriter(arq);
-            gravarArq.println(n);
-            for(i=1;i<=n;i++){
-                matricula++;
-                nome = geraNomeCompleto();
-                nota = 10 + rand.nextInt(91);
-                gravarArq.printf("%d;%s;%d%n",matricula, nome, nota);
+            try (PrintWriter gravarArq = new PrintWriter(arq)) {
+                gravarArq.println(n);
+                for(i=1;i<=n;i++){
+                    matricula++;
+                    nome = geraNomeCompleto();
+                    nota = 10 + rand.nextInt(91);
+                    gravarArq.printf("%d;%s;%d%n",matricula, nome, nota);
+                }
             }
             arq.close();
         } catch (IOException ex) {
