@@ -195,9 +195,9 @@ public class BinaryTree <T extends Comparable<T>>{
     }
 
     public void walkInOrder(){
-        System.out.println("=========Caminhando em Ordem:=========");
+        System.out.println("==Escrevendo em 'saida_EM_ORDEM.txt'==");
         walkInOrderAux(this.root);
-        System.out.println("=========>Caminhou em Ordem<==========");
+        System.out.println("======================================");
     }
 
     private void walkInLevelAux(Node<T> root, int levelWanted, int levelCurrent){

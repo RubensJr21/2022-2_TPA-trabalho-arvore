@@ -191,21 +191,21 @@ public class BinaryTree <T extends Comparable<T>>{
         // TO-DO: Implementar método de caminhar em ordem
         if(root != null){
             walkInOrderAux(root.getLeftChild());
-            print(root.getValue().toString());
+            DEBUG.writeOutputInFile(root.getValue().toString());
             walkInOrderAux(root.getRightChild());
         }
     }
 
     public void walkInOrder(){
-        print("\n*****Caminhando em Ordem:*****");
+        print("=========Caminhando em Ordem:=========");
         walkInOrderAux(this.root);
-        print("\n******************************");
+        print("=========>Caminhou em Ordem<==========");
     }
 
     private void walkInLevelAux(Node<T> root, int levelWanted, int levelCurrent){
         // verficar se está no nível
         if(levelWanted == levelCurrent){
-            print(root.getValue().toString());
+            DEBUG.writeOutputInFile(root.getValue().toString());
         } else if(levelCurrent < levelWanted) { 
             int haveChild = haveChild(root);
             if(haveChild == 2){
@@ -233,15 +233,13 @@ public class BinaryTree <T extends Comparable<T>>{
     */
 
     public void walkInLevel(){
-        print("\n*****Caminhando em Nível:*****");
+        print("=========Caminhando em Nível:=========");
         updateHeightTree(this.root);
         
         for(int i = 0;i <= this.heightTree;i++){
-            print("*****Nivel " + i + "*****");
             walkInLevelAux(this.root, i, 0);
-            print("*****Fim do nivel: " + i + "*****");
         }
-        print("\n******************************");
+        print("=========>Caminhou em Nível<==========");
     }
 
     private int heightTree(Node<T> root, int level){
