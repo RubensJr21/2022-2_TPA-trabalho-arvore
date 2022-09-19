@@ -24,10 +24,11 @@ public class Main {
         System.out.println("Maior elemento: " + tree.getBiggerItem().toString());
         System.out.println("Menor elemento: " + tree.getLesserItem().toString());
         System.out.println("Pior caso de busca: " + tree.getWorstCase().toString());
-        System.out.println("=====ENCERRANDO IMPRESSÃO ÁRVORE =====\n\n");
+        System.out.println("=====ENCERRANDO IMPRESSÃO ÁRVORE =====\n");
     }
 
     private static void fillTree(BinaryTree<Aluno> tree, String nameFile) throws IOException{
+        System.out.println("===========CARREGANDO ÁRVORE==========");
         BufferedReader buffRead = new BufferedReader(new FileReader(nameFile));
 		String linha = "";
         int qtdRegistros = Integer.parseInt(buffRead.readLine()); // Lê primeira linha que diz a quantidade de resgitros
@@ -44,9 +45,11 @@ public class Main {
             tree.insertItem(student);
 		}
 		buffRead.close();
+        System.out.println("===========>CARREGOU ÁRVORE<==========\n");
     }
     
     private static void searchByMatricula(BinaryTree<Aluno> tree){
+        System.out.println("===========BUSCANDO MATRICULA=========");
         System.out.println("Qual a matricula que deseja buscar? ");
         
         int matricula = entrada.nextInt();
@@ -61,9 +64,11 @@ public class Main {
         }else{
             System.out.println("Matricula não existe");
         }
+        System.out.println("======================================\n");
     }
 
     private static void includeAluno(BinaryTree<Aluno> tree){
+        System.out.println("=============INSERINDO ALUNO==========");
         System.out.println("Qual a matricula? ");
         int matricula = entrada.nextInt();
         
@@ -76,9 +81,11 @@ public class Main {
         Aluno aluno = new Aluno(matricula, nome, nota);
 
         tree.insertItem(aluno);
+        System.out.println("======================================\n");
     }
 
     private static void deleteByMatricula(BinaryTree<Aluno> tree){
+        System.out.println("=============DELETANDO ALUNO==========");
         System.out.println("Qual a matricula que deseja excluir?");
         int matricula = entrada.nextInt();
         String nome = null;
@@ -86,36 +93,58 @@ public class Main {
         
         Aluno aluno = new Aluno(matricula, nome, nota);
         tree.removeItem(aluno);
+        System.out.println("======================================\n");
     }
     
+    private static void sair(BinaryTree<Aluno> tree){
+        // Sair o programa deve percorrer a árvore usando caminhamento "em ordem" e gerar um arquivo em que cada linha apresentará a matrícula, o nome e a nota de um aluno, sempre separados por ;.
+        tree.walkInOrder();
+    }
+
+    private static void printMenu(){
+        System.out.println("=================MENU=================");
+        System.out.println("1 - Exibir estatísticas");
+        System.out.println("2 - Efetuar busca por matrícula");
+        System.out.println("3 - Excluir por matrícula");
+        System.out.println("4 - Incluir aluno");
+        System.out.println("5 - Sair");
+        System.out.println("======================================");
+    }
+
+    private static int getSelection(){
+        System.out.println("Escolha uma opção: ");
+        return entrada.nextInt();
+    }
+
     public static void main(String[] args){        
         BinaryTree<Aluno> tree = new BinaryTree<Aluno>();
         try {
             fillTree(tree, "entradaBalanceada10000000.txt");
-
-            printStatiscts(tree);
-
-            //efetuar busca por matricula
-            // searchByMatricula(tree);
             
-            // includeAluno(tree);
-            
-            tree.walkInOrder();
-            
-            //excluir aluno
-            // deleteByMatricula(tree);
-            
-            // searchByMatricula(tree);
-
-            //incluir aluno
-            // includeAluno(tree);
-            
-            //sair
-            tree.walkInOrder();
-
-            tree.walkInLevel();
-
-            printStatiscts(tree);
+            int selection;
+            do {
+                printMenu();
+                selection = getSelection();
+                switch (selection) {
+                    case 1:
+                        printStatiscts(tree);
+                        break;
+                    case 2:
+                        searchByMatricula(tree);
+                        break;
+                    case 3:
+                        deleteByMatricula(tree);
+                        break;
+                    case 4:
+                        includeAluno(tree);
+                        break;
+                    case 5:
+                        sair(tree); 
+                        break;
+                    default:
+                        break;
+                }
+            } while(selection != 5);
         } catch (IOException e) {
             println("Erro ao abrir o arquivo");
         }

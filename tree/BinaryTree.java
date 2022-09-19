@@ -1,6 +1,10 @@
 // Camila Volponi e Rubens Júnior
 package tree;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public class BinaryTree <T extends Comparable<T>>{
     private Node<T> root;
     private T lesserNode, biggerNode, worstCase;
@@ -12,6 +16,17 @@ public class BinaryTree <T extends Comparable<T>>{
         this.biggerNode = null;
     }
     
+    public static void writeOutputInFile(String line){
+        try (FileWriter arq = new FileWriter("saida_EM_ORDEM.txt", true)) {
+            try (PrintWriter gravarArq = new PrintWriter(arq)) {
+                gravarArq.println(line);
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
     private void insert(Node<T> root, Node<T> item){
         int result = item.getValue().compareTo((root.getValue()));
         if(result == 0){
@@ -130,7 +145,7 @@ public class BinaryTree <T extends Comparable<T>>{
     private void remove(Node<T> root, T item){
         if(root != null){
             int result = item.compareTo(root.getValue());
-            System.out.println(String.format("result = %d", result));
+            // System.out.println(String.format("result = %d", result));
             if(result == 0){ // só vai acontecer caso deseje remover a root
                 int childRemove = anyOfMyChildWillBeRemoved(root, item);
                 if(childRemove == -1){ // caso do filho esquerdo do nó atual ser removido
@@ -174,20 +189,21 @@ public class BinaryTree <T extends Comparable<T>>{
         // TO-DO: Implementar método de caminhar em ordem
         if(root != null){
             walkInOrderAux(root.getLeftChild());
-            System.out.println(root.getValue().toString());
+            writeOutputInFile(root.getValue().toString());
             walkInOrderAux(root.getRightChild());
         }
     }
 
     public void walkInOrder(){
-        System.out.println("\n\nCaminhando em Ordem:");
+        System.out.println("=========Caminhando em Ordem:=========");
         walkInOrderAux(this.root);
+        System.out.println("=========>Caminhou em Ordem<==========");
     }
 
     private void walkInLevelAux(Node<T> root, int levelWanted, int levelCurrent){
         // verficar se está no nível
         if(levelWanted == levelCurrent){
-            System.out.println(root.getValue().toString());
+            writeOutputInFile(root.getValue().toString());
         } else if(levelCurrent < levelWanted) { 
             int haveChild = haveChild(root);
             if(haveChild == 2){
@@ -215,11 +231,12 @@ public class BinaryTree <T extends Comparable<T>>{
     */
 
     public void walkInLevel(){
-        System.out.println("\n\nCaminhando em Nível:");
+        System.out.println("=========Caminhando em Nível:=========");
         updateHeightTree(this.root);
         for(int i = 0;i <= this.heightTree;i++){
             walkInLevelAux(this.root, i, 0);
         }
+        System.out.println("=========>Caminhou em Nível<==========");
     }
 
     private int heightTree(Node<T> root, int level){
