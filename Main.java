@@ -57,7 +57,13 @@ public class Main {
         float nota = 0;
         
         Aluno a = new Aluno(matricula, nome, nota);
+        long start = System.currentTimeMillis();
         Aluno item = tree.searchItem(a);
+        long ends = System.currentTimeMillis();
+
+        System.out.println(ends);
+        System.out.println(start);
+        System.out.println("Tempo de busca: " + (ends - start));
         
         if(item != null){
             println(item.toString());
