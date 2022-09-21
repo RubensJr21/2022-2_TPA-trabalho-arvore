@@ -125,7 +125,8 @@ public class Main {
     public static void main(String[] args){        
         BinaryTree<Aluno> tree = new BinaryTree<Aluno>();
         try {
-            fillTree(tree, "entradaBalanceada10000000.txt");
+            // fillTree(tree, "entradaBalanceada10000000.txt");
+            fillTree(tree, "entradaOrdenada100.txt");
             
             int selection;
             do {

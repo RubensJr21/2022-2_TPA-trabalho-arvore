@@ -281,7 +281,7 @@ public class BinaryTree <T extends Comparable<T>>{
         }
     }
     public T getLesserItem(){
-        updateLesserNode(root.getLeftChild());
+        updateLesserNode(root);
         return lesserNode;
     }
     
@@ -293,7 +293,7 @@ public class BinaryTree <T extends Comparable<T>>{
         }
     }
     public T getBiggerItem(){
-        updateBiggerNode(root.getLeftChild());
+        updateBiggerNode(root);
         return biggerNode;
     }
 

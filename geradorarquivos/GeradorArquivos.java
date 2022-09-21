@@ -139,9 +139,10 @@ public class GeradorArquivos {
         tam a quantidade de registros que deseja e passar definir o tipo de arquivo
         que pode ser ORDENADO ou BALANCEADO*/
         
-        int TAM = 10000000;
+        // int TAM = 10000000;
+        int TAM = 100;
         long tempoInicial = System. currentTimeMillis();        
-        g.geraArquivo(TAM,TipoArquivo.BALANCEADO);
+        g.geraArquivo(TAM,TipoArquivo.ORDENADO);
         long tempoFinal = System. currentTimeMillis();
         
         System.out.println("Tempo Total de geração do arquivo em ms: " + (tempoFinal - tempoInicial));
