@@ -114,19 +114,39 @@ public class BinaryTree <T extends Comparable<T>>{
         return 0;
     }
 
-    private void removeChild(Node<T> root, Node<T> child){
+    private void removeChild(Node<T> root, Node<T> child, int lado){
         int childHaveChild;
         childHaveChild = haveChild(child);
         if(childHaveChild == 2){ // O filho tiver 2 filhos
-            root.setLeftChild(child.getLeftChild());
-            insert(this.root, child.getLeftChild());
+            if(lado == -1){
+                root.setLeftChild(child.getLeftChild());
+            } else if(lado == 1){
+                root.setRightChild(child.getLeftChild());
+            }
+            insert(this.root, child.getRightChild());
         } else if(childHaveChild == 1){ // O filho tiver apenas 1 filho à esquerda
-            root.setLeftChild(child.getLeftChild());
+            if(lado == -1){
+                root.setLeftChild(child.getLeftChild());
+            } else if(lado == 1) {
+                root.setRightChild(child.getLeftChild());
+            }
         } else if(childHaveChild == 0){ // O filho tiver apenas 1 filho à direita
-            root.setRightChild(child.getRightChild());
+            if(lado == -1){
+                root.setLeftChild(child.getRightChild());
+            } else if(lado == 1) {
+                root.setRightChild(child.getRightChild());
+            }
         } else { // O filho não ter filhos
             root.setLeftChild(null);
+            root.setRightChild(null);
         }
+    }
+
+    private void removeLeftChild(Node<T> root){
+        removeChild(root, root.getLeftChild(), -1);
+    }
+    private void removeRightChild(Node<T> root){
+        removeChild(root, root.getRightChild(), 1);
     }
 
     private void removeRoot(){
@@ -149,21 +169,21 @@ public class BinaryTree <T extends Comparable<T>>{
             if(result == 0){ // só vai acontecer caso deseje remover a root
                 int childRemove = anyOfMyChildWillBeRemoved(root, item);
                 if(childRemove == -1){ // caso do filho esquerdo do nó atual ser removido
-                    removeChild(root, root.getLeftChild());
+                    removeLeftChild(root);
                 } else if(childRemove == 1){ // caso do filho direito do nó atual ser removido
-                    removeChild(root, root.getRightChild());
+                    removeRightChild(root);
                 }
             } else {
                 int childRemove = anyOfMyChildWillBeRemoved(root, item);
                 if(result < 0){
                     if(childRemove == -1){ // caso do filho esquerdo do nó atual ser removido
-                        removeChild(root, root.getLeftChild());
+                        removeLeftChild(root);
                     } else {
                         remove(root.getLeftChild(), item);
                     }
                 } else {
                     if(childRemove == 1){ // caso do filho direito do nó atual ser removido
-                        removeChild(root, root.getRightChild());
+                        removeRightChild(root);
                     } else {
                         remove(root.getRightChild(), item);
                     }
